@@ -19,6 +19,19 @@ library(dplyr)
 plot(df$Number.Structures)
 ggplot(df, aes(Land.Use.Category)) +
   geom_bar()
+zerosPercentage <- colSums(df==0)/nrow(df)*100  
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+greaterThan50 <-  which((colSums(df==0)/nrow(df)*100) > 50)
+barplot(greaterThan50, main = "Percentage of zero values", col = greaterThan50, names.arg = round(greaterThan50, 0)) 
+unwantedColumns <- names(which((colSums(df==0)/nrow(df)*100) > 50))
+cleanedDf = df[!(names(df)) %in% unwantedColumns]
+zerosPercentage <- colSums(cleanedDf==0)/nrow(cleanedDf)*100  
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+names(which((colSums(cleanedDf==0)/nrow(cleanedDf)*100) > 0))
+col <- c("Total.Area",      "Community.Board", "Lot.Front",       "Lot.Depth")
+cleanedDf = cleanedDf[!(names(cleanedDf)) %in% c("Allowable.Building.to.Floor.Area")]
+barplot(zerosPercentage[col], main = "Percentage of zero values", col = zerosPercentage[col], names.arg = zerosPercentage[col]) 
+plot(cleanedDf[col])
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
