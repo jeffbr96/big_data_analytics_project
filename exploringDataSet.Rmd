@@ -36,6 +36,68 @@ plot(cleanedDf[col])
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+names(df)
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Borough)) +
+  geom_bar()
+
+clr = c('yellow', 'red', 'blue', 'brown', 'green')
+
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Longitude, Latitude, col = Borough, )) +
+  geom_point() +
+  scale_color_viridis(option = "D")
+  
+colors()
+df %>%
+  group_by(Borough) %>%
+  filter(Borough == 1) %>%
+  group_by(Current.Uses) %>%
+  ggplot(aes(Current.Uses)) + 
+  geom_boxplot() 
+ 
+ unique(df$Current.Uses)
+ df <- df[which(df$Current.Uses == "PUBLIC SCHOOL"),]
+ 
+ ggplot(df, aes(Latitude, Longitude)) +
+   geom_point()
+ names(df)
+ df
+ 
+
+```
+```{r}
+library(ggmap)
+library(sp)
+library(tigris)
+#install.packages("devtools")
+#install.packages("rworldmap")
+# load library
+library(rworldmap)
+# get map
+worldmap <- getMap(resolution = "coarse")
+# plot world map
+
+# plot data on world map
+plot(worldmap, xlim = c(-74, -73), ylim = c(40, 41), 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(df$Longitude, df$Latitude, 
+       col = "red", cex = .01)
+
+df$Latitude
+
+devtools::install_github("dkahle/ggmap", ref = "tidyup")
+chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, 
+                                  right = -87.2713, top = 42.0677), 
+                         zoom = 11)
+
+ggmap(chicago)
+```
+
