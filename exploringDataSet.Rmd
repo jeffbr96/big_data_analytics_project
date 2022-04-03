@@ -74,6 +74,7 @@ df %>%
 
 ```
 ```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
 library(ggmap)
 library(sp)
 library(tigris)
@@ -91,13 +92,130 @@ plot(worldmap, xlim = c(-74, -73), ylim = c(40, 41),
 points(df$Longitude, df$Latitude, 
        col = "red", cex = .01)
 
-df$Latitude
+library(usmap)
+library(ggplot2)
 
-devtools::install_github("dkahle/ggmap", ref = "tidyup")
-chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, 
-                                  right = -87.2713, top = 42.0677), 
-                         zoom = 11)
+map <- plot_usmap(include = c("NY"))
 
-ggmap(chicago)
+
+data <- data.frame(df$Longitude, df$Latitude)
+data <- data[which(!is.na(data)),]
+data <- na.exclude(data)
+sum(is.na(data))
+new <- data[which(!is.na(data)),]
+df <- na.exclude(df)
+#data$Longitude <- as.data.frame(df$Longitude)
+#data$Latitude <- as.data.frame(df$Latitude)
+transformed_data <- usmap_transform(data)
+data
+plot_usmap(include = c("NY")) +
+  geom_point(data = transformed_data, aes(transformed_data$df.Longitude, transformed_data$df.Latitude),
+             color = "red")
+
+plot(map, 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(df$Longitude, df$Latitude, 
+       col = "red", cex = .01)
+plot(map, 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(data$lat, data$lon, 
+       col = "red", cex = .01)
+plot(df$Latitude, df$Longitude)
+
+
+#plot_usmap("states") + 
+#  geom_point(data = transformed_data, 
+#             aes(x = x, y = y), 
+#             color = "red",
+#             size = 3)
+
+#plot(map, xlim = c(-74, -73), ylim = c(40, 41), 
+#     asp = 1, bg = "lightblue", col = "black", fill = T) +
+#points(df$Longitude, df$Latitude, 
+#       col = "red", cex = .01)
+
+#df$Latitude
+
+#devtools::install_github("dkahle/ggmap", ref = "tidyup")
+#chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, 
+#                                  right = -87.2713, top = 42.0677), 
+#                         zoom = 11)
+
+#ggmap(chicago)
+```
+```{r}
+library(maps)
+library(ggplot2)
+
+maps::map('county', region = 'new york', city = "new york", col = "#5E610B") 
+#map.cities(us.cities, country="NY", col = "#642EFE", cex = 0.6) # map cities recorded in us.cities to NY State
+map.axes(cex.axis=0.8) 
+ylim(40, 41)
+title(main = "New York State by Counties", xlab = "Longitude", ylab = "Latitude",
+      cex.lab = 0.1) 
+points(-76, 43, 
+       col = "red", cex = .8) 
+
+
+
+  
+
+#?ylim()
+#?map  
+#ylim(40, 41) +
+ # xlim(-76, -72)
+#df$Latitude
+#df$Longitude
+```
+
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+str(df)
+
+clf <- df[c("Borough", "Total.Area", "Num.Floors", "Ratio.Building.to.Floor.Area")]
+clf <- na.exclude(clf)
+print(is.na(clf))
+nrow(clf)
+nrow(df)
+use <- df[]
+
+sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
+train <- clf[sample_rows, ]
+test <- clf[-sample_rows, ]
+
+normalize <- function(x) {
+return ((x - min(x)) / (max(x) - min(x))) }
+
+clf <- as.data.frame(lapply(clf[,0:4], normalize))
+sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
+train <- clf[sample_rows, ]
+test <- clf[-sample_rows, ]
+labels <- df[sample_rows, ]
+train
+test
+test <- test[which(is.na(test) == FALSE),]
+train <- train[which(is.na(train) == FALSE),]
+use <- use[which(is.na(use) == FALSE),]
+
+plot(grouping(use$Current.Uses))
+
+knn(train = train, test = test, cl = train)
+```
+
+```{r}
+install.packages("naivebayes")
+library(naivebayes)
+
+# Build the location prediction model
+df$Borough <- as.factor(df$Borough)
+
+model <- naive_bayes(Borough ~ Open.Petroleum.Spill, data = df)
+
+# Predict Thursday's 9am location
+plot(model) #model 4 has more oil spills
+model
+
+# Predict Saturdays's 9am location
+predict(locmodel, saturday9am)
 ```
 
