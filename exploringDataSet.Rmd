@@ -1,17 +1,85 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
+  word_document: default
 ---
+### Dataset
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+This dataset contains 69,533 observations of 77 variables of 35 are integers over 25 are characters and almost 15 are numeric. It is a very large dataset so; I did not think that extracting just the information that I need ahead of time would not be a good idea. for now, I have decided to look at all data and pick through as well as clean the data separately. for that I think that using some generalization and getting a snapshot of what I have will yield me good insight on which questions to ask.  
 
 ```{r}
+library(dplyr)
 df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
 head(df)
-names(df)
 ```
+
+
+This bar plot shows the types of data I have. this data probably contains a lot of good data to group by. another important aspect of this dataset is that it can generate good geographical analysis, timeseries as well as other classifications and regressions.  
+
+```{r}
+data_types <- function(frame) {
+  res <- lapply(frame, class)
+  res_frame <- data.frame(unlist(res))
+  barplot(table(res_frame), main="Data Types", col="steelblue", ylab="Number of Features")
+}
+
+data_types(df)
+```
+
+
+```{r}
+names(df)
+library("reshape2") 
+library(ggplot2)
+data_long <- melt(df)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+to put this dataset to the test i ran boxplot of all varibles and was able to verify that 4 values stood out with outstanding values. I decided then to investigate them individually.
+```{r}
+col = c("Assess.Land", "Exempt.Land", "Exempt.Tot", "BBL")
+df1 <- df[,col]
+df1
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value, fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+the values for Assess.Land, Exempt.Land and Exempt.Land are squashed at the bottom. this makes for a data set hard to visualize.
+```{r}
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+using a log tranformation on the y value helps bring the first three varibles to a better perspective but BBL does not fare as nicely. so it is best to look at all the variables separetly.  
+
+```{r}
+col = c("Assess.Land", "Exempt.Land", "Exempt.Tot")
+df1 <- df[,col]
+df1
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+I can now see that they have some resemblance and share some regularity but I need to truly see what this values mean.
+
+```{r}
+library(dplyr)
+plot(df$Assess.Land)
+df1 <- df[which(df$Assess.Land < 100000),] 
+ggplot(df, aes(df$Borough, df$Assess.Land, size = df$Assess.Land, col = "red")) +
+  geom_point()
+summary(df$Assess.Land)
+```
+I discovered that Asses.Land is the actual assessed land value for Fiscal Year 2013. it makes sense that this value can get so high in NY. The exempt land is the tax value for 2013 and exempt total is the total exempt value for the year
 ```{r}
 library(ggplot2)
 library(plyr)
