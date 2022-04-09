@@ -73,11 +73,40 @@ I can now see that they have some resemblance and share some regularity but I ne
 
 ```{r}
 library(dplyr)
+library(ggplot2)
+library(viridis)
+par(mfrow = c(1, 3)) 
 plot(df$Assess.Land)
-df1 <- df[which(df$Assess.Land < 100000),] 
-ggplot(df, aes(df$Borough, df$Assess.Land, size = df$Assess.Land, col = "red")) +
+plot(df$Exempt.Land)
+plot(df$Exempt.Tot)
+
+ggplot(df, aes(Borough, Assess.Land, size = Assess.Land, col = "red")) +
   geom_point()
 summary(df$Assess.Land)
+
+df$newfl <- cut(df$Num.Floors,
+              breaks=c(0, 2, 5, 50, 500),
+              labels=c('house', 'building', 'tall building', 'sky scraper')) 
+na.exclude(df$newfl) 
+
+df %>%
+  group_by(Borough) %>%
+    group_by(Num.Floors) %>%
+        ggplot(aes(Longitude, Latitude, size = Assess.Land)) +
+          geom_point(shape = 21, aes(alpha = 0.25, color = factor(Borough), fill = newfl)) +
+          scale_color_brewer(palette = "Dark2") +
+          scale_colour_discrete(na.translate = F)
+      
+
+summary(df$Num.Floors)
+names(df)
+df$Num.Floors
+
+df$newfl
+
+filter(df, !is.na(newfl)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = Borough, fill = newfl), position = "fill")
 ```
 I discovered that Asses.Land is the actual assessed land value for Fiscal Year 2013. it makes sense that this value can get so high in NY. The exempt land is the tax value for 2013 and exempt total is the total exempt value for the year
 ```{r}
