@@ -39,6 +39,36 @@ head(data_long)
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
+col <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
+df1 <- df[!(names(df)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col <- c('Total.Area')
+df1 <- df1[!(names(df1)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
+df1 <- df1[!(names(df1)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
 ```
 to put this dataset to the test i ran boxplot of all varibles and was able to verify that 4 values stood out with outstanding values. I decided then to investigate them individually.
 ```{r}
@@ -70,6 +100,13 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
 I can now see that they have some resemblance and share some regularity but I need to truly see what this values mean.
+
+```{r}
+boxplot(df$Total.Area)
+boxplot(log(df$Total.Area))
+
+```
+
 
 ```{r}
 library(dplyr)
