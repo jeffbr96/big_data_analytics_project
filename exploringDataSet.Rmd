@@ -34,42 +34,107 @@ data_types(df)
 names(df)
 library("reshape2") 
 library(ggplot2)
+
+par(mfrow = c(1, 2))
+
 data_long <- melt(df)                                      # Reshaping data frame
-head(data_long)       
+#head(data_long)       
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
-col <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
+
+col1 <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
 df1 <- df[!(names(df)) %in% col]
 
 #removing columns with large numbers 
 data_long <- melt(df1)                                      # Reshaping data frame
-head(data_long)       
+#head(data_long)       
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-col <- c('Total.Area')
-df1 <- df1[!(names(df1)) %in% col]
+par(mfrow = c(1, 2))
+
+col2 <- c('Total.Area')
+df2 <- df1[!(names(df1)) %in% col]
 
 #removing columns with large numbers 
-data_long <- melt(df1)                                      # Reshaping data frame
-head(data_long)       
+data_long <- melt(df2)                                      # Reshaping data frame
+#head(data_long)       
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
-df1 <- df1[!(names(df1)) %in% col]
+col3 <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
+df3 <- df2[!(names(df2)) %in% col]
 
 #removing columns with large numbers 
-data_long <- melt(df1)                                      # Reshaping data frame
+data_long <- melt(df3)                                      # Reshaping data frame
 head(data_long)       
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
+
+par(mfrow = c(1, 2))
+
+col4 <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
+df4 <- df3[!(names(df3)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df4)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col5 <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
+df5 <- df4[!(names(df4)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df5)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+par(mfrow = c(1, 2))
+
+col6 <- c('Year.Alter.1', 'Year.Alter.2')
+df6 <- df5[!(names(df5)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df6)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col7 <- c('Number.Structures', 'Ratio.Building.to.Floor.Area', 'Community.Board')
+df7 <- df6[!(names(df6)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df7)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+par(mfrow = c(1, 2))
+
+col8 <- c('Longitude', 'Latitude')
+df8 <- df7[!(names(df7)) %in% col]
+
+#removing columns with large numbers 
+data_long <- melt(df8)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
 
 ```
+
+
 to put this dataset to the test i ran boxplot of all varibles and was able to verify that 4 values stood out with outstanding values. I decided then to investigate them individually.
 ```{r}
 col = c("Assess.Land", "Exempt.Land", "Exempt.Tot", "BBL")
@@ -105,6 +170,87 @@ I can now see that they have some resemblance and share some regularity but I ne
 boxplot(df$Total.Area)
 boxplot(log(df$Total.Area))
 
+```
+
+CLASSIFICATION
+```{r}
+head(df)
+head(df[-1])
+
+install.packages(class)
+install.packages("gmodels")
+library(class)
+library(gmodels)
+
+col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area','Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area')
+df <- df[col]
+normalize <- function(x) {
+return ((x - min(x)) / (max(x) - min(x))) }
+
+df_n <- as.data.frame(lapply(df, normalize))
+summary(df_n$Total.Gross.Area.Structures)
+nrow(df)
+
+df_train <- df[1:65,]
+df_test <- df[66:100,]
+
+df_train_labels <- df[1:65, 1]
+df_test_labels <- df[66:100, 1]
+
+df_test_labels
+
+df_test_pred <- knn(train = df_train, test = df_test,cl = df_train_labels, k=10)
+CrossTable(x = df_test_labels, y = df_test_pred, prop.chisq=FALSE)
+head(df)
+table(df_test_pred, df_test_labels)
+df_train_labels
+mean(df_test_pred == df_test_labels)
+```
+
+classification Bayesian 
+```{r}
+#install.packages(naivebayes)
+#install.packages('tidyverse')
+#library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+#install.packages('rpart')
+library(rpart)
+#install.packages('randomForest')
+library(randomForest)
+library(naivebayes)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+df$Borough <- factor(df$Borough)
+locmodel <- naive_bayes(Borough ~ Assess.Land, data = df)
+
+# Predict Thursday's 9am location. 
+pr <- predict(locmodel, df[which(df$Num.Floors > 20),])
+plot(pr)
+
+# Predict Saturdays's 9am location
+predict(locmodel, df)
+
+describe(df)
+missmap(df)
+names(df)
+
+ggplot(df, aes(df$Assess.Land, colour = df$Borough)) +
+  geom_freqpoly(binwidth = 1) + 
+  labs(title="Age Distribution by Outcome")
 ```
 
 
@@ -146,6 +292,32 @@ filter(df, !is.na(newfl)) %>%
   geom_bar(mapping = aes(x = Borough, fill = newfl), position = "fill")
 ```
 I discovered that Asses.Land is the actual assessed land value for Fiscal Year 2013. it makes sense that this value can get so high in NY. The exempt land is the tax value for 2013 and exempt total is the total exempt value for the year
+
+
+tree
+```{r}
+head(df)
+
+# Determine the number of rows for training
+nrow(df) * 0.75
+
+# Create a random sample of row IDs
+sample_rows <- sample(nrow(df), nrow(df) * 0.75)
+
+# Create the training dataset
+train <- df[sample_rows, ]
+
+# Create the test dataset
+test <- df[-sample_rows, ]
+
+df$LUCF <- factor(df$Land.Use.Category) 
+model <- rpart(LUCF ~ .,data = train, method = "class", control = rpart.control(cp = 0))
+
+test$pred <- predict(model, test, type = "class")
+mean(test$pred == test$LUCF)
+```
+
+
 ```{r}
 library(ggplot2)
 library(plyr)
