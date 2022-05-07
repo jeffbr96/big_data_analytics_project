@@ -167,12 +167,68 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
 I can now see that they have some resemblance and share some regularity but I need to truly see what this values mean.
 
 ```{r}
-boxplot(df$Total.Area)
-boxplot(log(df$Total.Area))
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
 
+col = c("Total.Area")
+df1 <- df[,col]
+
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(y =log(value), fill = 'red')) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
 ```
 
-CLASSIFICATION
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
+
+df1 <- df[,col]
+df1
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
+
+df1 <- df[,col]
+df1
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col <- c('Longitude', 'Latitude')
+df1 <- df[,col]
+
+df1
+      
+ggplot(df1, aes(x = Longitude, y = Latitude, fill = 'green')) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+col <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
+
+df1 <- df[,col]
+df1
+data_long <- melt(df1)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+```
+
+
+
+CLASSIFICATIOn 
+
 ```{r}
 head(df)
 head(df[-1])
@@ -239,17 +295,20 @@ locmodel <- naive_bayes(Borough ~ Assess.Land, data = df)
 
 # Predict Thursday's 9am location. 
 pr <- predict(locmodel, df[which(df$Num.Floors > 20),])
+
+summary(pr)
+
 plot(pr)
 
 # Predict Saturdays's 9am location
-predict(locmodel, df)
+df$pr <- predict(locmodel, df)
 
 describe(df)
 missmap(df)
 names(df)
 
-ggplot(df, aes(df$Assess.Land, colour = df$Borough)) +
-  geom_freqpoly(binwidth = 1) + 
+ggplot(df, aes(df$Assess.Land, df$pr, colour = df$Borough)) +
+  geom_point() + 
   labs(title="Age Distribution by Outcome")
 ```
 
@@ -296,6 +355,9 @@ I discovered that Asses.Land is the actual assessed land value for Fiscal Year 2
 
 tree
 ```{r}
+library(rpart)
+library(dplyr)
+library(randomForest)
 head(df)
 
 # Determine the number of rows for training
@@ -311,10 +373,33 @@ train <- df[sample_rows, ]
 test <- df[-sample_rows, ]
 
 df$LUCF <- factor(df$Land.Use.Category) 
-model <- rpart(LUCF ~ .,data = train, method = "class", control = rpart.control(cp = 0))
+#model <- randomForest(LUCF ~ ., data = train)
+#names(df)
 
-test$pred <- predict(model, test, type = "class")
-mean(test$pred == test$LUCF)
+# For character columns only, replace any blank strings with NA values
+df <- df %>%
+  mutate(across(where(is.character), ~ na_if(.,"")))
+
+unique(df$Potential.Urban.Ag)
+
+
+#test$pred <- predict(model, test, type = "class")
+#mean(test$pred == test$LUCF)
+```
+
+Regression
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+names(df)
+
+fmla <- Num.Floors ~ Assess.Land
+
+numflrbyassl <- lm(fmla, data = df)
 ```
 
 
