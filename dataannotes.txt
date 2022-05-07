@@ -1,0 +1,41 @@
+1#  Hi my name is jefferson I am here to present you the new york city urban agriculture project 
+2#  The dataset I used is called “new York suitability of city owned and leased property for urban agriculture” this dataset is hosted and collected by the city of ny
+3#  The data was too big to make meaningful assumptions, so a lot of cleaning had to be done.
+4#  I wanted to see the distribution in data type to decide how to progress in my exploration.  
+5#  I used boxplots to look at distributions and found that this could help me greatly in classifying target variables for my questions
+6#  Striping the values with similar range gave me a greater understanding of how my data interact and relate
+7#  After --noting the data with similar ranges, I removed it from the list and continue looking further for more meaningful relations
+8#  The total area distribution stood out but I needed to use a log transformation to visualize it 
+9#  The more layers I peeled the better grasp I had in the system as a whole
+10# Area stood out as a good candidate to explore—BIN as other values I encounter had no value to me because I didn’t have an understanding of what they represent 
+11# Some groups were larger than others– this in particular showed  great promise
+12# All of them had to do with area from different kinds of usage
+13# The lower I get the closer I get to data more suitable for classification
+14# The data shows smaller subdivision of areas and values such as year and post code which are not very helpful to my immediate needs
+15# I decided to keep stratifying the data but I'm no longer checking them separately. Here there is year1 and year2 surely not something I can use or understand
+16# Here I found number of floors, something fun to look at further. I end up using borough extensively and longitude and latitude to validate my findings 
+17# Most of the data at this level is either unusable or not important to me
+18# This is the last layer with very low range values by which only borough was useful to me
+19# With better understanding of my data I was able to think of interesting questions that could be answered by classification 
+20# Cherry picking the data helped with building the models because a lot of work had to be done to make sure the data was suitable to the algorithms
+21# I build a formula for my model to predict potential urban agriculture development based on major use, land mark, open petroleum spills, land use category, government clean up program, current uses and borough. The model I chose was naïve bayes with 1 as the laPlace argument to resolved for zeroes in the data.   
+22# This visualization was very useful and allowed me to ask a meaningful question about the probability of a green thumb garden by borough in New York 
+23# Manhattan shows a good distribution of probabilities with a healthy lean towards a greater chance of possessing a green thumb garden
+24# The Bronx show a likewise distribution, slightly less condensed at the green thumb garden end 
+25# Brooklyn shows an even greater shift to the left
+26# Queens confirms that not every borough has the same commitment to programs such as these
+27# Staten island shows complete inadequacy to the idea of distributing city dwellings with green havens 
+28# I double checked the data to be sure I had the boroughs correctly marked
+29# After successfully answering my classification question I decided to use regression to ask different types of questions.
+30# Assess land value, total exemption and residential floor area were enough to answer the questions I wanted to ask. The relative distribution of residential floor and all the other variables was flatten at the axis but i still wanted to use it
+31# After removing zeroes the data started behaving more like something I could work with 
+32# The linear regression model did very well even though the data is not very linear
+33# The gain plot shows how close the predicted data are to the real data 
+34# The second question --how does residential floor area affects land assessment values. Below 2G squared units the value changes wildly within the range of 50G dollars. After 2G squared units, the value raises to above 75G dollars and even well over 100G dollars. 
+35# The blue line represents the actual exemptions while red represents actual land assessment values the dots represent predicted land assessment values. The question was. Are exemptions fair? I think the data shows that the discrepancy of assessment value and exemptions is undeniable. The rate of growth in exemptions is much greater than assessment value. 
+36# Because my result was so compelling I decided to remove some extreme outliers to be really sure I could confirm what ive seen 
+37# My Rsquared lowered to 0.64 but I still think it is enough to help add confidence to my answers 
+38# The gain curve also shows the loss at higher values 
+39# At this close range the residential floor area did not seem to affect the assessment values. I believe in new York other factors must have more weight than simply size of livable area. The prediction lost precision --at this resolution the data underfit the model --it is good for understanding the data but not as a financial advice model
+40# read the slide
+41# read the slide

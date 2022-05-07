@@ -1,0 +1,382 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+install.packages(class)
+install.packages("gmodels")
+library(class)
+library(gmodels)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area','Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area')
+df <- df[col]
+normalize <- function(x) {
+return ((x - min(x)) / (max(x) - min(x))) }
+
+df_n <- as.data.frame(lapply(df, normalize))
+summary(df_n$Total.Gross.Area.Structures)
+nrow(df)
+
+df_train <- df[1:65,]
+df_test <- df[66:100,]
+
+df_train_labels <- df[1:65, 1]
+df_test_labels <- df[66:100, 1]
+
+df_test_labels
+
+df_test_pred <- knn(train = df_train, test = df_test,cl = df_train_labels, k=10)
+CrossTable(x = df_test_labels, y = df_test_pred, prop.chisq=FALSE)
+head(df)
+table(df_test_pred, df_test_labels)
+df_train_labels
+mean(df_test_pred == df_test_labels)
+```
+
+```{r}
+#install.packages(naivebayes)
+#install.packages('tidyverse')
+#library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+#install.packages('rpart')
+library(rpart)
+#install.packages('randomForest')
+library(randomForest)
+library(naivebayes)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+df$Borough <- factor(df$Borough)
+locmodel <- naive_bayes(Borough ~ Assess.Land, data = df)
+
+# Predict Thursday's 9am location. 
+pr <- predict(locmodel, df[which(df$Num.Floors > 20),])
+
+summary(pr)
+
+plot(pr)
+
+# Predict Saturdays's 9am location
+df$pr <- predict(locmodel, df)
+
+describe(df)
+missmap(df)
+names(df)
+
+ggplot(df, aes(df$Assess.Land, df$pr, colour = df$Borough)) +
+  geom_point() + 
+  labs(title="Age Distribution by Outcome")
+```
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+par(mfrow = c(1, 3)) 
+plot(df$Assess.Land)
+plot(df$Exempt.Land)
+plot(df$Exempt.Tot)
+
+ggplot(df, aes(Borough, Assess.Land, size = Assess.Land, col = "red")) +
+  geom_point()
+summary(df$Assess.Land)
+
+df$newfl <- cut(df$Num.Floors,
+              breaks=c(0, 2, 5, 50, 500),
+              labels=c('house', 'building', 'tall building', 'sky scraper')) 
+na.exclude(df$newfl) 
+
+df %>%
+  group_by(Borough) %>%
+    group_by(Num.Floors) %>%
+        ggplot(aes(Longitude, Latitude, size = Assess.Land)) +
+          geom_point(shape = 21, aes(alpha = 0.25, color = factor(Borough), fill = newfl)) +
+          scale_color_brewer(palette = "Dark2") +
+          scale_colour_discrete(na.translate = F)
+      
+
+summary(df$Num.Floors)
+names(df)
+df$Num.Floors
+
+df$newfl
+
+filter(df, !is.na(newfl)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = Borough, fill = newfl), position = "fill")
+```
+
+```{r}
+library(rpart)
+library(dplyr)
+library(randomForest)
+head(df)
+
+# Determine the number of rows for training
+nrow(df) * 0.75
+
+# Create a random sample of row IDs
+sample_rows <- sample(nrow(df), nrow(df) * 0.75)
+
+# Create the training dataset
+train <- df[sample_rows, ]
+
+# Create the test dataset
+test <- df[-sample_rows, ]
+
+df$LUCF <- factor(df$Land.Use.Category) 
+#model <- randomForest(LUCF ~ ., data = train)
+#names(df)
+
+# For character columns only, replace any blank strings with NA values
+df <- df %>%
+  mutate(across(where(is.character), ~ na_if(.,"")))
+
+unique(df$Potential.Urban.Ag)
+
+
+#test$pred <- predict(model, test, type = "class")
+#mean(test$pred == test$LUCF)
+```
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+names(df)
+
+fmla <- Num.Floors ~ Assess.Land
+
+numflrbyassl <- lm(fmla, data = df)
+```
+
+```{r}
+library(ggplot2)
+library(plyr)
+library(dplyr)
+plot(df$Number.Structures)
+ggplot(df, aes(Land.Use.Category)) +
+  geom_bar()
+zerosPercentage <- colSums(df==0)/nrow(df)*100  
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+greaterThan50 <-  which((colSums(df==0)/nrow(df)*100) > 50)
+barplot(greaterThan50, main = "Percentage of zero values", col = greaterThan50, names.arg = round(greaterThan50, 0)) 
+unwantedColumns <- names(which((colSums(df==0)/nrow(df)*100) > 50))
+cleanedDf = df[!(names(df)) %in% unwantedColumns]
+zerosPercentage <- colSums(cleanedDf==0)/nrow(cleanedDf)*100  
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+names(which((colSums(cleanedDf==0)/nrow(cleanedDf)*100) > 0))
+col <- c("Total.Area",      "Community.Board", "Lot.Front",       "Lot.Depth")
+cleanedDf = cleanedDf[!(names(cleanedDf)) %in% c("Allowable.Building.to.Floor.Area")]
+barplot(zerosPercentage[col], main = "Percentage of zero values", col = zerosPercentage[col], names.arg = zerosPercentage[col]) 
+plot(cleanedDf[col])
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+names(df)
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Borough)) +
+  geom_bar()
+
+clr = c('yellow', 'red', 'blue', 'brown', 'green')
+
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Longitude, Latitude, col = Borough, )) +
+  geom_point() +
+  scale_color_viridis(option = "D")
+  
+colors()
+df %>%
+  group_by(Borough) %>%
+  filter(Borough == 1) %>%
+  group_by(Current.Uses) %>%
+  ggplot(aes(Current.Uses)) + 
+  geom_boxplot() 
+ 
+ unique(df$Current.Uses)
+ df <- df[which(df$Current.Uses == "PUBLIC SCHOOL"),]
+ 
+ ggplot(df, aes(Latitude, Longitude)) +
+   geom_point()
+ names(df)
+ df
+```
+
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+library(ggmap)
+library(sp)
+library(tigris)
+#install.packages("devtools")
+#install.packages("rworldmap")
+# load library
+library(rworldmap)
+# get map
+worldmap <- getMap(resolution = "coarse")
+# plot world map
+
+# plot data on world map
+plot(worldmap, xlim = c(-74, -73), ylim = c(40, 41), 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(df$Longitude, df$Latitude, 
+       col = "red", cex = .01)
+
+library(usmap)
+library(ggplot2)
+
+map <- plot_usmap(include = c("NY"))
+
+
+data <- data.frame(df$Longitude, df$Latitude)
+data <- data[which(!is.na(data)),]
+data <- na.exclude(data)
+sum(is.na(data))
+new <- data[which(!is.na(data)),]
+df <- na.exclude(df)
+#data$Longitude <- as.data.frame(df$Longitude)
+#data$Latitude <- as.data.frame(df$Latitude)
+transformed_data <- usmap_transform(data)
+data
+plot_usmap(include = c("NY")) +
+  geom_point(data = transformed_data, aes(transformed_data$df.Longitude, transformed_data$df.Latitude),
+             color = "red")
+
+plot(map, 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(df$Longitude, df$Latitude, 
+       col = "red", cex = .01)
+plot(map, 
+     asp = 1, bg = "lightblue", col = "black", fill = T) +
+points(data$lat, data$lon, 
+       col = "red", cex = .01)
+plot(df$Latitude, df$Longitude)
+
+
+#plot_usmap("states") + 
+#  geom_point(data = transformed_data, 
+#             aes(x = x, y = y), 
+#             color = "red",
+#             size = 3)
+
+#plot(map, xlim = c(-74, -73), ylim = c(40, 41), 
+#     asp = 1, bg = "lightblue", col = "black", fill = T) +
+#points(df$Longitude, df$Latitude, 
+#       col = "red", cex = .01)
+
+#df$Latitude
+
+#devtools::install_github("dkahle/ggmap", ref = "tidyup")
+#chicago <- get_stamenmap(bbox = c(left = -88.0225, bottom = 41.5949, 
+#                                  right = -87.2713, top = 42.0677), 
+#                         zoom = 11)
+
+#ggmap(chicago)
+```
+
+```{r}
+library(maps)
+library(ggplot2)
+
+maps::map('county', region = 'new york', city = "new york", col = "#5E610B") 
+#map.cities(us.cities, country="NY", col = "#642EFE", cex = 0.6) # map cities recorded in us.cities to NY State
+map.axes(cex.axis=0.8) 
+ylim(40, 41)
+title(main = "New York State by Counties", xlab = "Longitude", ylab = "Latitude",
+      cex.lab = 0.1) 
+points(-76, 43, 
+       col = "red", cex = .8) 
+
+
+
+  
+
+#?ylim()
+#?map  
+#ylim(40, 41) +
+ # xlim(-76, -72)
+#df$Latitude
+#df$Longitude
+```
+
+```{r}
+library(class)
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+str(df)
+
+clf <- df[c("Total.Area", "Num.Floors", "Ratio.Building.to.Floor.Area")]
+clf <- na.exclude(clf)
+print(is.na(clf))
+nrow(clf)
+nrow(df)
+use <- df[]
+
+sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
+train <- clf[sample_rows, ]
+test <- clf[-sample_rows, ]
+
+normalize <- function(x) {
+return ((x - min(x)) / (max(x) - min(x))) }
+
+clf <- as.data.frame(lapply(clf[,0:3], normalize))
+sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
+train <- clf[sample_rows, ]
+test <- clf[-sample_rows, ]
+labels <- df[sample_rows, ]
+train
+test
+test <- test[which(is.na(test) == FALSE),]
+train <- train[which(is.na(train) == FALSE),]
+use <- use[which(is.na(use) == FALSE),]
+print(is.na(test) == TRUE)
+test
+#plot(grouping(use$Current.Uses))
+
+knn(train = train, test = test, cl = train)
+```
+
+```{r}
+install.packages("naivebayes")
+library(naivebayes)
+
+# Build the location prediction model
+df$Borough <- as.factor(df$Borough)
+
+model <- naive_bayes(Borough ~ Open.Petroleum.Spill, data = df)
+
+# Predict Thursday's 9am location
+plot(model) #model 4 has more oil spills
+model
+
+# Predict Saturdays's 9am location
+#predict(locmodel, as.data.frame(df$Major_Use))
+```
+
