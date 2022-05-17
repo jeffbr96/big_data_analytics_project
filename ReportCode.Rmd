@@ -1,0 +1,113 @@
+---
+title: "report"
+author: "Jefferson Bourguinon Coutinho"
+date: "5/7/2022"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Report Code Section
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+names(df)
+library("reshape2") 
+library(ggplot2)
+
+data_long <- melt(df)                                      # Reshaping data frame
+      
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col1 <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
+df1 <- df[!(names(df)) %in% col1]
+
+#removing columns with large numbers 
+data_long <- melt(df1)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+
+col2 <- c('Total.Area')
+df2 <- df1[!(names(df1)) %in% col2]
+
+#removing columns with large numbers 
+data_long <- melt(df2)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col3 <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
+df3 <- df2[!(names(df2)) %in% col3]
+
+#removing columns with large numbers 
+data_long <- melt(df3)                                      # Reshaping data frame
+head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col4 <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
+df4 <- df3[!(names(df3)) %in% col4]
+
+#removing columns with large numbers 
+data_long <- melt(df4)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col5 <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
+df5 <- df4[!(names(df4)) %in% col5]
+
+#removing columns with large numbers 
+data_long <- melt(df5)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col6 <- c('Year.Alter.1', 'Year.Alter.2')
+df6 <- df5[!(names(df5)) %in% col6]
+
+#removing columns with large numbers 
+data_long <- melt(df6)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col7 <- c('Number.Structures', 'Ratio.Building.to.Floor.Area', 'Community.Board')
+df7 <- df6[!(names(df6)) %in% col7]
+
+#removing columns with large numbers 
+data_long <- melt(df7)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+par(mfrow = c(1, 2))
+
+col8 <- c('Longitude', 'Latitude')
+df8 <- df7[!(names(df7)) %in% col8]
+
+#removing columns with large numbers 
+data_long <- melt(df8)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
