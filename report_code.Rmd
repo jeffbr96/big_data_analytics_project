@@ -1,0 +1,607 @@
+---
+title: "Report Code"
+output:
+  word_document: default
+  html_notebook: default
+  pdf_document: default
+---
+This report contains all the code and visualizations from the original report.!1
+
+```{r}
+library(dplyr)
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+```
+
+
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+library("reshape2") 
+library(ggplot2)
+
+data_long <- melt(df)                                      # Reshaping data frame
+      
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col1 <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
+df1 <- df[!(names(df)) %in% col1]
+
+#removing columns with large numbers 
+data_long <- melt(df1)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+
+col2 <- c('Total.Area')
+df2 <- df1[!(names(df1)) %in% col2]
+
+#removing columns with large numbers 
+data_long <- melt(df2)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col3 <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
+df3 <- df2[!(names(df2)) %in% col3]
+
+#removing columns with large numbers 
+data_long <- melt(df3)                                      # Reshaping data frame
+       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col4 <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
+df4 <- df3[!(names(df3)) %in% col4]
+
+#removing columns with large numbers 
+data_long <- melt(df4)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col5 <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
+df5 <- df4[!(names(df4)) %in% col5]
+
+#removing columns with large numbers 
+data_long <- melt(df5)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col6 <- c('Year.Alter.1', 'Year.Alter.2')
+df6 <- df5[!(names(df5)) %in% col6]
+
+#removing columns with large numbers 
+data_long <- melt(df6)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col7 <- c('Number.Structures', 'Ratio.Building.to.Floor.Area', 'Community.Board')
+df7 <- df6[!(names(df6)) %in% col7]
+
+#removing columns with large numbers 
+data_long <- melt(df7)                                      # Reshaping data frame
+#head(data_long)       
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col8 <- c('Longitude', 'Latitude')
+df8 <- df7[!(names(df7)) %in% col8]
+
+#removing columns with large numbers 
+data_long <- melt(df8)                                      # Reshaping data frame
+    
+ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+
+```{r}
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+data_types <- function(frame) {
+  res <- lapply(frame, class)
+  res_frame <- data.frame(unlist(res))
+  barplot(table(res_frame), main="Data Types", col="steelblue", ylab="Number of Features")
+}
+
+data_types(df)
+```
+
+```{r}
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+col = c("Assess.Land", "Exempt.Land", "Exempt.Tot", "BBL")
+df1 <- df[,col]
+
+data_long <- melt(df1)                                      # Reshaping data frame
+     
+ggplot(data_long, aes(x = variable, y = value, fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col = c("Assess.Land", "Exempt.Land", "Exempt.Tot")
+df1 <- df[,col]
+
+data_long <- melt(df1)                                      # Reshaping data frame
+       
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col = c("Total.Area")
+df1 <- df[,col]
+
+data_long <- melt(df1)                                      # Reshaping data frame
+      
+ggplot(data_long, aes(y =log(value), fill = 'red')) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+
+col <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
+
+df1 <- df[,col]
+
+data_long <- melt(df1)                                      # Reshaping data frame
+      
+ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
+  geom_boxplot() +
+  scale_x_discrete(guide = guide_axis(angle = 90))
+```
+
+
+```{r}
+#install.packages(naivebayes)
+#install.packages('tidyverse')
+#library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+#install.packages('rpart')
+library(rpart)
+#install.packages('randomForest')
+library(randomForest)
+library(naivebayes)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+df$Borough <- factor(df$Borough)
+locmodel <- naive_bayes(Borough ~ Assess.Land, data = df)
+
+# Predict
+pr <- predict(locmodel, df[which(df$Num.Floors > 20),])
+
+plot(pr)
+
+# Predict
+df$pr <- predict(locmodel, df)
+
+#describe(df)
+missmap(df)
+
+ggplot(df, aes(df$Assess.Land, df$pr, colour = df$Borough)) +
+  geom_point() + 
+  labs(title="Assess Land by Borough")
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+par(mfrow = c(1, 3)) 
+plot(df$Assess.Land)
+plot(df$Exempt.Land)
+plot(df$Exempt.Tot)
+
+ggplot(df, aes(Borough, Assess.Land, size = Assess.Land, col = "red")) +
+  geom_point()
+
+df$newfl <- cut(df$Num.Floors,
+              breaks=c(0, 2, 5, 50, 500),
+              labels=c('house', 'building', 'tall building', 'sky scraper')) 
+#na.exclude(df$newfl) 
+
+df %>%
+  group_by(Borough) %>%
+    group_by(Num.Floors) %>%
+        ggplot(aes(Longitude, Latitude, size = Assess.Land)) +
+          geom_point(shape = 21, aes(alpha = 0.25, color = factor(Borough), fill = newfl)) +
+          scale_color_brewer(palette = "Dark2") +
+          scale_colour_discrete(na.translate = F)
+      
+
+filter(df, !is.na(newfl)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = Borough, fill = newfl), position = "fill")
+```
+
+```{r}
+library(ggplot2)
+library(plyr)
+library(dplyr)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+plot(df$Number.Structures)
+ggplot(df, aes(Land.Use.Category)) +
+  geom_bar()
+
+zerosPercentage <- colSums(df==0)/nrow(df)*100  
+
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+
+greaterThan50 <-  which((colSums(df==0)/nrow(df)*100) > 50)
+
+barplot(greaterThan50, main = "Percentage of zero values", col = greaterThan50, names.arg = round(greaterThan50, 0)) 
+
+unwantedColumns <- names(which((colSums(df==0)/nrow(df)*100) > 50))
+
+cleanedDf = df[!(names(df)) %in% unwantedColumns]
+
+zerosPercentage <- colSums(cleanedDf==0)/nrow(cleanedDf)*100  
+barplot(zerosPercentage, main = "Percentage of zero values", col = zerosPercentage, names.arg = round(zerosPercentage, 0)) 
+
+#names(which((colSums(cleanedDf==0)/nrow(cleanedDf)*100) > 0))
+
+col <- c("Total.Area",      "Community.Board", "Lot.Front",       "Lot.Depth")
+
+cleanedDf = cleanedDf[!(names(cleanedDf)) %in% c("Allowable.Building.to.Floor.Area")]
+
+barplot(zerosPercentage[col], main = "Percentage of zero values", col = zerosPercentage[col], names.arg = zerosPercentage[col]) 
+
+plot(cleanedDf[col])
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Borough)) +
+  geom_bar()
+
+clr = c('yellow', 'red', 'blue', 'brown', 'green')
+
+df %>%
+  group_by(Borough) %>%
+  ggplot(aes(Longitude, Latitude, col = Borough, )) +
+  geom_point() +
+  scale_color_viridis(option = "D")
+  
+#colors()
+df %>%
+  group_by(Borough) %>%
+  filter(Borough == 1) %>%
+  group_by(Current.Uses) %>%
+  ggplot(aes(Current.Uses)) + 
+  geom_boxplot() 
+ 
+ #unique(df$Current.Uses)
+ df <- df[which(df$Current.Uses == "PUBLIC SCHOOL"),]
+ 
+ ggplot(df, aes(Latitude, Longitude)) +
+   geom_point()
+```
+
+
+```{r}
+library(maps)
+library(ggplot2)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+maps::map('county', region = 'new york', city = "new york", col = "#5E610B") 
+#map.cities(us.cities, country="NY", col = "#642EFE", cex = 0.6) # map cities recorded in us.cities to NY State
+map.axes(cex.axis=0.8) 
+ylim(40, 41)
+title(main = "New York State by Counties", xlab = "Longitude", ylab = "Latitude",
+      cex.lab = 0.1) 
+points(-76, 43, 
+       col = "red", cex = .8) 
+```
+
+```{r}
+install.packages("naivebayes")
+library(naivebayes)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+# Build the location prediction model
+df$Borough <- as.factor(df$Borough)
+
+model <- naive_bayes(Borough ~ Open.Petroleum.Spill, data = df)
+
+# Predict Thursday's 9am location
+plot(model) #model 4 has more oil spills
+#model1
+
+# Predict Saturdays's 9am location
+#predict(locmodel, as.data.frame(df$Major_Use))
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(WVPlots)
+#install.packages(naivebayes)
+#install.packages('tidyverse')
+#library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+#install.packages('rpart')
+library(rpart)
+#install.packages('randomForest')
+library(randomForest)
+library(naivebayes)
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+cols <- c("Major.Use", "Potential.Urban.Ag", "Landmark", "Open.Petroleum.Spill", "Land.Use.Category", "Govt.Clean.Up.Program", "Current.Uses", "Borough")
+data <- df[,cols]
+
+data[is.na(data) | data == ""] <- NA
+#data$Potential.Urban.Ag
+fmla <- Potential.Urban.Ag ~ .
+
+
+model <- naive_bayes(fmla, data = data, laplace = 1)
+data$pred <- predict(model, data, type = "prob")
+plot(predict(model, data, type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+  
+
+plot(predict(model, data[which(data$Borough == 1),], type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+
+plot(predict(model, data[which(data$Borough == 2),], type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+
+plot(predict(model, data[which(data$Borough == 3),], type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+
+plot(predict(model, data[which(data$Borough == 4),], type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+
+plot(predict(model, data[which(data$Borough == 5),], type = "prob"), col = unique(data$Land.Use.Category), pch = 0, size = unique(data$Land.Use.Category))
+legend("topright", legend = unique(data$Land.Use.Category),
+      col = unique(data$Land.Use.Category),
+      pch = 0)
+
+#unique(data$Borough)
+#unique(data$Land.Use.Category)
+
+data$lat <- df$Latitude
+data$lon <- df$Longitude
+
+ggplot(df, aes(x = data$lon, y = data$lat, color = factor(data$Borough))) + 
+  geom_point() +
+  scale_color_manual(values = c('green', 'red', 'yellow', 'orange', 'purple'))
+
+#logistic regression
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+cols <- c("Assess.Land", "Exempt.Tot")
+df <- df[cols]
+
+df$Assess.Land <- as.numeric(df$Assess.Land)
+df$Exempt.Tot <- as.numeric(df$Exempt.Tot)
+
+
+normalize<-function(x) {
+    sapply(x, function(y) {if(all(is.na(y))) {y}
+           else if(sum(!is.na(y))!=1) {helper<- (y-min(y, na.rm=TRUE))/(max(y, na.rm=TRUE)-min(y, na.rm=TRUE)) 
+                                      helper}
+           else if(sum(!is.na(y))==1) {helper<-ifelse(is.na(y),0,1)
+                 helper}
+    })
+}
+
+df <- as.data.frame(lapply(df, normalize))
+
+nrow(df)
+
+fmla <- Potential.Urban.Ag ~ .
+
+model <- glm(Assess.Land ~ Exempt.Tot, data = df, family = "binomial")
+df$pred <- predict(model, df)
+
+ggplot(df, aes(x = df$pred, y = df$Assess.Land, color = "red")) + 
+  geom_point() +
+  geom_abline(color = "blue") 
+```
+
+```{r}
+#install.packages("WVPlots")
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(WVPlots)
+#install.packages(naivebayes)
+#install.packages('tidyverse')
+#library(tidyverse)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('caret')
+library(caret)
+#install.packages('caretEnsemble')
+library(caretEnsemble)
+#install.packages('psych')
+library(psych)
+#install.packages('Amelia')
+library(Amelia)
+#install.packages('mice')
+library(mice)
+#install.packages('GGally')
+library(GGally)
+#install.packages('rpart')
+library(rpart)
+#install.packages('randomForest')
+library(randomForest)
+library(naivebayes)
+
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+cols <- c("Assess.Land", "Exempt.Tot", "Residential.Floor.Area")
+data <- df[cols]
+
+plot(data)
+
+nrow(data)
+count(data[which(data == 0),])
+data <- data[which(data$Residential.Floor.Area != 0),]
+data <- data[which(data$Assess.Land != 0),]
+data <- data[which(data$Exempt.Tot != 0),]
+
+
+nrow(data)
+plot(data)
+
+fmla <- Assess.Land ~ Exempt.Tot + Residential.Floor.Area
+fmla
+model <- lm(fmla, data = data)
+
+#data <- data[-2,]
+nrow(data)
+
+data$pred <- predict(model)
+
+#glance(model)
+
+GainCurvePlot(data, "pred", "Assess.Land", "Land Price Assessment Model")
+
+nrow(data)
+ggplot(data, aes(x = data$pred, y = data$Assess.Land)) + 
+  geom_point() +
+  geom_abline(color = "blue") +
+  xlab("Predicted Land Assessment Value") +
+  ylab("Land Assement Value") +
+  ggtitle("Linear Model of Land Assessment X Predicted")
+
+ggplot(data, aes(x = data$Residential.Floor.Area, y = data$pred)) + 
+  geom_point() +
+  geom_line(aes(data$Residential.Floor.Area, data$Assess.Land, color = 'Asses Land')) +
+  labs(color = 'Land Assess') +
+  geom_line(aes(data$Residential.Floor.Area, data$Exempt.Tot, color = 'Total Exemtion')) +
+  xlab("Residential Floor Area") +
+  ylab("Price Assessment of Land") +
+  ggtitle("Linear Model of Land Assessment X Residentil Floor Area") 
+
+heatmap(as.matrix(data))
+```
+
+
+```{r}
+#install.packages("WVPlots")
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(WVPlots)
+#install.packages('vtreat')
+library(vtreat)
+
+
+df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
+
+cols <- c("Assess.Land", "Exempt.Tot", "Residential.Floor.Area")
+data <- df[cols]
+
+nrow(data)
+count(data[which(data == 0),])
+data <- data[which(data$Residential.Floor.Area != 0),]
+data <- data[which(data$Assess.Land != 0),]
+data <- data[which(data$Exempt.Tot != 0),]
+
+plot(data)
+
+data <- data[which(data$Residential.Floor.Area < 1e+08),]
+data <- data[which(data$Assess.Land < 1e+08),]
+data <- data[which(data$Exempt.Tot < 1e+08),]
+
+plot(data)
+
+fmla <- Assess.Land ~ Exempt.Tot + Residential.Floor.Area
+
+model <- lm(fmla, data = data)
+
+#data <- data[-2,]
+nrow(data)
+
+data$pred <- predict(model)
+#unique(data$Potential.Urban.Ag)
+nrow(data)
+
+#glance(model)
+
+ggplot(data, aes(x = data$pred, y = data$Assess.Land, color = data$Potential.Urban.Ag)) + 
+  geom_point() +
+  geom_abline(color = "blue") 
+
+GainCurvePlot(data, "pred", "Assess.Land", "Land Price Assessment Model")
+
+
+ggplot(data, aes(x = data$Residential.Floor.Area, y = data$pred)) + 
+  geom_point() +
+  geom_line(aes(data$Residential.Floor.Area, data$Assess.Land, color = 'Asses Land')) +
+  labs(color = 'Land Assess') +
+  geom_line(aes(data$Residential.Floor.Area, data$Exempt.Tot, color = 'Total Exemtion')) +
+  xlab("Residential Floor Area") +
+  ylab("Price Assessment of Land") +
+  ggtitle("Linear Model of Land Assessment X Residentil Floor Area")
+```
+
