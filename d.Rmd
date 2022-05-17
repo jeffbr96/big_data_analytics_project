@@ -28,15 +28,13 @@ df_train <- df[1:65,]
 df_test <- df[66:100,]
 
 df_train_labels <- df[1:65, 1]
-df_test_labels <- df[66:100, 1]
-
-df_test_labels
+df_test_labels <- df[66:100, 1]1!
 
 df_test_pred <- knn(train = df_train, test = df_test,cl = df_train_labels, k=10)
 CrossTable(x = df_test_labels, y = df_test_pred, prop.chisq=FALSE)
-head(df)
+
 table(df_test_pred, df_test_labels)
-df_train_labels
+
 mean(df_test_pred == df_test_labels)
 ```
 
@@ -81,7 +79,6 @@ df$pr <- predict(locmodel, df)
 
 describe(df)
 missmap(df)
-names(df)
 
 ggplot(df, aes(df$Assess.Land, df$pr, colour = df$Borough)) +
   geom_point() + 
@@ -101,7 +98,6 @@ plot(df$Exempt.Tot)
 
 ggplot(df, aes(Borough, Assess.Land, size = Assess.Land, col = "red")) +
   geom_point()
-summary(df$Assess.Land)
 
 df$newfl <- cut(df$Num.Floors,
               breaks=c(0, 2, 5, 50, 500),
@@ -116,12 +112,6 @@ df %>%
           scale_color_brewer(palette = "Dark2") +
           scale_colour_discrete(na.translate = F)
       
-
-summary(df$Num.Floors)
-names(df)
-df$Num.Floors
-
-df$newfl
 
 filter(df, !is.na(newfl)) %>% 
   ggplot() +
@@ -147,7 +137,7 @@ train <- df[sample_rows, ]
 test <- df[-sample_rows, ]
 
 df$LUCF <- factor(df$Land.Use.Category) 
-#model <- randomForest(LUCF ~ ., data = train)
+model <- randomForest(LUCF ~ ., data = train)
 #names(df)
 
 # For character columns only, replace any blank strings with NA values
@@ -227,8 +217,6 @@ df %>%
  
  ggplot(df, aes(Latitude, Longitude)) +
    geom_point()
- names(df)
- df
 ```
 
 ```{r}
@@ -265,7 +253,7 @@ df <- na.exclude(df)
 #data$Longitude <- as.data.frame(df$Longitude)
 #data$Latitude <- as.data.frame(df$Latitude)
 transformed_data <- usmap_transform(data)
-data
+
 plot_usmap(include = c("NY")) +
   geom_point(data = transformed_data, aes(transformed_data$df.Longitude, transformed_data$df.Latitude),
              color = "red")
@@ -333,11 +321,11 @@ df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analiti
 str(df)
 
 clf <- df[c("Total.Area", "Num.Floors", "Ratio.Building.to.Floor.Area")]
-clf <- na.exclude(clf)
-print(is.na(clf))
-nrow(clf)
-nrow(df)
-use <- df[]
+#clf <- na.exclude(clf)
+#print(is.na(clf))
+#nrow(clf)
+#nrow(df)
+#use <- df[]
 
 sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
 train <- clf[sample_rows, ]
@@ -353,14 +341,15 @@ test <- clf[-sample_rows, ]
 labels <- df[sample_rows, ]
 train
 test
-test <- test[which(is.na(test) == FALSE),]
-train <- train[which(is.na(train) == FALSE),]
-use <- use[which(is.na(use) == FALSE),]
-print(is.na(test) == TRUE)
-test
+#test <- test[which(is.na(test) == FALSE),]
+#train <- train[which(is.na(train) == FALSE),]
+#use <- use[which(is.na(use) == FALSE),]
+#print(is.na(test) == TRUE)
+#test
 #plot(grouping(use$Current.Uses))
 
-knn(train = train, test = test, cl = train)
+model = knn(train = as.vector(train), test = as.vector(test), cl = as.vector(train))
+plot(model)
 ```
 
 ```{r}
@@ -374,7 +363,7 @@ model <- naive_bayes(Borough ~ Open.Petroleum.Spill, data = df)
 
 # Predict Thursday's 9am location
 plot(model) #model 4 has more oil spills
-model
+#model1
 
 # Predict Saturdays's 9am location
 #predict(locmodel, as.data.frame(df$Major_Use))
