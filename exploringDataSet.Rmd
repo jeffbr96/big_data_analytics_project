@@ -7,17 +7,11 @@ output:
 ---
 ### Dataset
 
-This dataset contains 69,533 observations of 77 variables of 35 are integers over 25 are characters and almost 15 are numeric. It is a very large dataset so; I did not think that extracting just the information that I need ahead of time would not be a good idea. for now, I have decided to look at all data and pick through as well as clean the data separately. for that I think that using some generalization and getting a snapshot of what I have will yield me good insight on which questions to ask.  
-
 ```{r}
 library(dplyr)
 df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
-
 head(df)
 ```
-
-
-This bar plot shows the types of data I have. this data probably contains a lot of good data to group by. another important aspect of this dataset is that it can generate good geographical analysis, timeseries as well as other classifications and regressions.  
 
 ```{r}
 data_types <- function(frame) {
@@ -29,22 +23,19 @@ data_types <- function(frame) {
 data_types(df)
 ```
 
-
 ```{r}
 names(df)
 library("reshape2") 
 library(ggplot2)
 
-par(mfrow = c(1, 2))
-
 data_long <- melt(df)                                      # Reshaping data frame
-#head(data_long)       
+       
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
 col1 <- c('Assess.Land', 'Exempt.Land', 'Exempt.Tot', 'BBL')
-df1 <- df[!(names(df)) %in% col]
+df1 <- df[!(names(df)) %in% col1]
 
 #removing columns with large numbers 
 data_long <- melt(df1)                                      # Reshaping data frame
@@ -53,10 +44,9 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-par(mfrow = c(1, 2))
 
 col2 <- c('Total.Area')
-df2 <- df1[!(names(df1)) %in% col]
+df2 <- df1[!(names(df1)) %in% col2]
 
 #removing columns with large numbers 
 data_long <- melt(df2)                                      # Reshaping data frame
@@ -66,7 +56,7 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   scale_x_discrete(guide = guide_axis(angle = 90))
 
 col3 <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
-df3 <- df2[!(names(df2)) %in% col]
+df3 <- df2[!(names(df2)) %in% col3]
 
 #removing columns with large numbers 
 data_long <- melt(df3)                                      # Reshaping data frame
@@ -75,10 +65,9 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-par(mfrow = c(1, 2))
 
 col4 <- c('Residential.Floor.Area', 'Office.Floor.Area', 'Retail.Floor.Area', 'Garage.Floor.Area', 'Storage.Floor.Area', 'Factory.Floor.Area')
-df4 <- df3[!(names(df3)) %in% col]
+df4 <- df3[!(names(df3)) %in% col4]
 
 #removing columns with large numbers 
 data_long <- melt(df4)                                      # Reshaping data frame
@@ -88,7 +77,7 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   scale_x_discrete(guide = guide_axis(angle = 90))
 
 col5 <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
-df5 <- df4[!(names(df4)) %in% col]
+df5 <- df4[!(names(df4)) %in% col5]
 
 #removing columns with large numbers 
 data_long <- melt(df5)                                      # Reshaping data frame
@@ -97,10 +86,8 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-par(mfrow = c(1, 2))
-
 col6 <- c('Year.Alter.1', 'Year.Alter.2')
-df6 <- df5[!(names(df5)) %in% col]
+df6 <- df5[!(names(df5)) %in% col6]
 
 #removing columns with large numbers 
 data_long <- melt(df6)                                      # Reshaping data frame
@@ -110,7 +97,7 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   scale_x_discrete(guide = guide_axis(angle = 90))
 
 col7 <- c('Number.Structures', 'Ratio.Building.to.Floor.Area', 'Community.Board')
-df7 <- df6[!(names(df6)) %in% col]
+df7 <- df6[!(names(df6)) %in% col7]
 
 #removing columns with large numbers 
 data_long <- melt(df7)                                      # Reshaping data frame
@@ -119,10 +106,8 @@ ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot f
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 
-par(mfrow = c(1, 2))
-
 col8 <- c('Longitude', 'Latitude')
-df8 <- df7[!(names(df7)) %in% col]
+df8 <- df7[!(names(df7)) %in% col8]
 
 #removing columns with large numbers 
 data_long <- melt(df8)                                      # Reshaping data frame
@@ -130,12 +115,8 @@ data_long <- melt(df8)                                      # Reshaping data fra
 ggplot(data_long, aes(x = variable, y = value)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
-
-
 ```
 
-
-to put this dataset to the test i ran boxplot of all varibles and was able to verify that 4 values stood out with outstanding values. I decided then to investigate them individually.
 ```{r}
 col = c("Assess.Land", "Exempt.Land", "Exempt.Tot", "BBL")
 df1 <- df[,col]
@@ -146,13 +127,13 @@ ggplot(data_long, aes(x = variable, y = value, fill = variable)) +            # 
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
-the values for Assess.Land, Exempt.Land and Exempt.Land are squashed at the bottom. this makes for a data set hard to visualize.
+
 ```{r}
 ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
-using a log tranformation on the y value helps bring the first three varibles to a better perspective but BBL does not fare as nicely. so it is best to look at all the variables separetly.  
+
 
 ```{r}
 col = c("Assess.Land", "Exempt.Land", "Exempt.Tot")
@@ -164,7 +145,7 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
   geom_boxplot() +
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
-I can now see that they have some resemblance and share some regularity but I need to truly see what this values mean.
+
 
 ```{r}
 df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
@@ -184,7 +165,7 @@ df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analiti
 col <- c('Total.Gross.Area.Structures', 'Commercial.Floor.Area', 'Other.Floor.Area', 'BIN')
 
 df1 <- df[,col]
-df1
+
 data_long <- melt(df1)                                      # Reshaping data frame
 head(data_long)       
 ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
@@ -194,7 +175,7 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
 col <- c('Block', 'Lot', 'Structure.Completed', 'Census.Block', 'Census.Tract', 'Postcode', 'Health.Area', 'Residential.Units', 'Residential.and.Non.Residential.Units', 'Lot.Front', 'Lot.Depth', 'Bldg.Front', 'Bldg.Depth', 'Condominium.Number')
 
 df1 <- df[,col]
-df1
+
 data_long <- melt(df1)                                      # Reshaping data frame
 head(data_long)       
 ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +            # Applying ggplot function
@@ -203,8 +184,6 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
 
 col <- c('Longitude', 'Latitude')
 df1 <- df[,col]
-
-df1
       
 ggplot(df1, aes(x = Longitude, y = Latitude, fill = 'green')) +            # Applying ggplot function
   geom_boxplot() +
@@ -224,10 +203,6 @@ ggplot(data_long, aes(x = variable, y = log(value), fill = variable)) +         
   scale_x_discrete(guide = guide_axis(angle = 90))
 ```
 ```
-
-
-
-CLASSIFICATIOn 
 
 ```{r}
 head(df)
@@ -557,56 +532,5 @@ points(-76, 43,
  # xlim(-76, -72)
 #df$Latitude
 #df$Longitude
-```
-
-```{r}
-df <- read.csv("C:/Users/jeffb/OneDrive/Desktop/WSU-Spring-2022/Big Data Analitics/data-capstone-final-project/nysus.csv")
-str(df)
-
-clf <- df[c("Borough", "Total.Area", "Num.Floors", "Ratio.Building.to.Floor.Area")]
-clf <- na.exclude(clf)
-print(is.na(clf))
-nrow(clf)
-nrow(df)
-use <- df[]
-
-sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
-train <- clf[sample_rows, ]
-test <- clf[-sample_rows, ]
-
-normalize <- function(x) {
-return ((x - min(x)) / (max(x) - min(x))) }
-
-clf <- as.data.frame(lapply(clf[,0:4], normalize))
-sample_rows <- sample(nrow(clf), nrow(clf) * 0.75)
-train <- clf[sample_rows, ]
-test <- clf[-sample_rows, ]
-labels <- df[sample_rows, ]
-train
-test
-test <- test[which(is.na(test) == FALSE),]
-train <- train[which(is.na(train) == FALSE),]
-use <- use[which(is.na(use) == FALSE),]
-
-plot(grouping(use$Current.Uses))
-
-knn(train = train, test = test, cl = train)
-```
-
-```{r}
-install.packages("naivebayes")
-library(naivebayes)
-
-# Build the location prediction model
-df$Borough <- as.factor(df$Borough)
-
-model <- naive_bayes(Borough ~ Open.Petroleum.Spill, data = df)
-
-# Predict Thursday's 9am location
-plot(model) #model 4 has more oil spills
-model
-
-# Predict Saturdays's 9am location
-predict(locmodel, saturday9am)
 ```
 
