@@ -549,7 +549,7 @@ normalize<-function(x) {
 
 df <- as.data.frame(lapply(df, normalize))
 is.na(df)
-summary(df)
+
 nrow(df)
 
 fmla <- Potential.Urban.Ag ~ .
