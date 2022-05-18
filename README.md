@@ -20,11 +20,11 @@ This dataset contains 69,533 observations of 77 variables of which 35 are intege
 
 This is the most important part of the project it would be impossible to extract any meaningful insights from this data without a proper look at the distribution and 5-point statistics. Because the data had varied ranges and the number of variables were high, I decided to use boxplots to stratify the data into range friendly variables.
 
-![](Picture1.png.png)
+![alt text](img/Picture1.png "Title Text")
 
 I could see that Assess.Land, Exempt.Land and Exempt.Tot are organized in a friendly range of values. To my surprise these values share similarities like the scale and relate to each other intimately. This led me to continue stratifying the data further to classify my data into groups of related objects that could be visualized separately.
 
-![](RackMultipart20220518-1-29277n_html_cb71c16301f2dc4e.png)
+![](img/Picture2.png)
 
 ![](RackMultipart20220518-1-29277n_html_256d8a19c822f18f.png)
 
