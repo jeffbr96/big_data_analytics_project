@@ -26,43 +26,43 @@ I could see that Assess.Land, Exempt.Land and Exempt.Tot are organized in a frie
 
 ![](img/Picture2.png)
 
-![](RackMultipart20220518-1-29277n_html_256d8a19c822f18f.png)
+![](img/Picture3.png)
 
 Further looking into distributions, I found Total.Area to be singled out. I visualize it separately using log transformation because the range would give us a distorted view otherwise.
 
-![](RackMultipart20220518-1-29277n_html_28881e2c2c1ee5ba.png)
+![](img/Picture4.png)
 
-![](RackMultipart20220518-1-29277n_html_5bf81ad85ab58f5.png)
+![](img/Picture5.png)
 
 Here we can see Total.Gross.Area.Structures, Commercial.Floor.Area and Other.Floor.Area. BIN is irrelevant to me because I don&#39;t understand what it stands for. We can see that these distributions are well balanced and probably share the same scale units.
 
-![](RackMultipart20220518-1-29277n_html_4648638d0b92ac8c.png)
+![](img/Picture6.png)
 
-![](RackMultipart20220518-1-29277n_html_b40405532a635a20.png)
+![](img/Picture7.png)
 
 This group is very important, and it can tell us a lot about how the city of New York is arranged. A surprising factor is high volume of Factory.Floor.Area which I didn&#39;t expect in such a big modern city, what I did expect was the high volume of Office.Floor.Area.
 
-![](RackMultipart20220518-1-29277n_html_2b61ce8d1d6528d0.png)
+![](img/Picture8.png)
 
-### ![](RackMultipart20220518-1-29277n_html_9a33e58383292077.png)
+![](img/Picture9.png)
 
 These are more fine-grained data; they still look promising but there is a lot of noise. Structure.Completed is probably a date or year value. Post.Code has no good use to me. I felt that I should stop looking into stratifying the data at this layer.
 
-![](RackMultipart20220518-1-29277n_html_b996c59b3ffeb7c2.png)
+![](img/Picture10.png)
 
-### ![](RackMultipart20220518-1-29277n_html_83338269b0dae7c8.png)
+![](img/Picture11.png)
 
-![](RackMultipart20220518-1-29277n_html_e280bf3ae8ebcc93.png)
+![](img/Picture12.png)
 
-### ![](RackMultipart20220518-1-29277n_html_499cd9d4f3ee59b3.png)
+![](img/Picture13.png)
 
-![](RackMultipart20220518-1-29277n_html_8654686e3ce8ff57.png)
+![](img/Picture14.png)
 
 Although these smaller numbers could be used further, I decided to not use them because they held no immediate importance to the questions I wished to ask. Looking at them was important to give me the confidence to dismissed them.
 
 From this bar plot we can see the types of data in the dataset. this dataset probably contains a lot of good data to group. another important aspect of this dataset is that it can generate good geographical analysis, timeseries as well as other classifications and regressions. It was difficult to extract the information at first but once I had explored the data in depth everything started to become gradually easier.
 
-![](RackMultipart20220518-1-29277n_html_2a49211d889c1e5f.png)
+![](img/Picture15.png)
 
 ### Machine learning
 
@@ -90,9 +90,9 @@ Laplace smoothing: 0
 
 A priori probabilities:
 
-1 2 3 4 5
-
-0.1176276 0.1411991 0.2545698 0.2473214 0.2392821
+| 1 | 2 | 3 | 4 | 5
+-
+| 0.1176276 | 0.1411991 0.2545698 0.2473214 0.2392821
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -112,15 +112,15 @@ Yes 0.086685414 0.041148910 0.041466584 0.036866895 0.007152302
 
 This wasn&#39;t the question I asked but it was interesting to see Manhattan as having the greatest probability of having an oil spill. Which contrast with the question I wanted to ask. Apparently, you can&#39;t be best in class at everything.
 
-![](RackMultipart20220518-1-29277n_html_5ff2522c26510b07.png)
+![](img/Picture16.png)
 
 My question was -what is the likelihood of a city urban agriculture site per borough in New York city? So, I checked whether naïve bayes was a suitable model to use. From all I read so far it is the simplest but most honest and accurate tool for modeling probabilities. To understand the use-land-category the Pluto data dictionary is provided.
 
-![](RackMultipart20220518-1-29277n_html_2456630411dea9e8.png)
+![](img/Picture17.png)
 
 The land-use-category is represented by colored squares. NAs are not represented in this data which is why there is a no color no number level in the plot legend. This graph shows the entire city of NY distribution of probabilities for either existing green-thumb-garden or any other case.
 
-![](RackMultipart20220518-1-29277n_html_c973593330bd27f8.png)
+![](img/Picture18.png)
 
 The information from the data dictionary below also helps us understand the potential-urban-agriculture-category. For my question all I wanted to know was the existence of one or not.
 
@@ -134,27 +134,27 @@ The information from the data dictionary below also helps us understand the pote
 
 To understand the results better I plotted multiple models filtered by borough to compared them to each other. The plot below represents only Manhattan.
 
-![](RackMultipart20220518-1-29277n_html_2b88ba15a4256b77.png)
+![](img/Picture19.png)
 
 The plot below represents the Bronx. From here we can begin to see the data shift left.
 
-![](RackMultipart20220518-1-29277n_html_65912461b4f2919c.png)
+![](img/Picture20.png)
 
 This plot represents Brooklyn. Again, the data continues to shift left.
 
-![](RackMultipart20220518-1-29277n_html_416a7f386da362c7.png)
+![](img/Picture21.png)
 
 Here we have Queens. This area drastically shifts left leaving mix residential and commercial building as well as transportation and utility as best candidates.
 
-![](RackMultipart20220518-1-29277n_html_ab0ecb26ec18e12.png)
+![](img/Picture22.png)
 
 And last, we have Staten Island. The worst in comparison to every other borough. The land use with greater probability were multifamily walk up building.
 
-![](RackMultipart20220518-1-29277n_html_5045460a930859f3.png)
+![](img/Picture23.png)
 
 To validate the location of boroughs by number I plotted all properties by latitude and longitude grouped by Borough to cross reference the locations with a map.
 
-![Picture 4](RackMultipart20220518-1-29277n_html_79131250caff8d3.gif) ![](RackMultipart20220518-1-29277n_html_60ca113a7119310e.png)
+![Picture 4](img/Picture24.png) ![](img/Picture25.png)
 
 It is not surprising that a borough would be doing better than another. If anything, I would expect that there is always going to be a difference. But values such as these are essential for benchmark and continuous improvement.
 
@@ -162,55 +162,55 @@ It is not surprising that a borough would be doing better than another. If anyth
 
 I decided to look at the price assessment of land, total exemption, and the residential floor area. I thought these variables could have interesting relationships and shared a continuous value structure.
 
-![](RackMultipart20220518-1-29277n_html_4eaf53c3963b2255.png)
+![](img/Picture26.png)
 
 The last plot did not show a useful relationship on any of the combinations that take residential floor area. I eliminated the zero values and now the distribution is starting to show promise. A possible reason for the flattening on the axis is that not every use case is residential, so any other use case would mean residential floor area would be zero. That does not mean that assessment and exemptions will at the same time be zero. So residential floor area could be zero and at the same time have a value for assessment and exemption. I concluded that zeroes in the residential floor area are nonexistent values and that these values are already represented by other use area values.
 
-![](RackMultipart20220518-1-29277n_html_2a25311922164d3.png)
+![](img/Picture27.png)
 
 The model yielded a 0.72 R-squared value which gives me some confidence that the model shows relatively good results. The T values of 33 and 2 gives us the P values for the T test which are 0.0000000000000002 for Exemptions, extremely close to zero, and 0.02 for residential floor area. Both are under 0.05 which gives us the confidence that the predictor has a statistically significant relationship with the response variable.
 
-![](RackMultipart20220518-1-29277n_html_abc00bcdb9907887.png)
+![](img/Picture28.png)
 
-![](RackMultipart20220518-1-29277n_html_238533aa4ccd25.png)
+![](img/Picture29.png)
 
 After running this plot, I realize that my model fit well overall.
 
-![](RackMultipart20220518-1-29277n_html_aabfbe132398940c.png)
+![](img/Picture30.png)
 
 Does residential floor area influence price of land predicted and observed? There is a group under 50 million dollars under 2 million units. The residential floor area at 4 million units has values in the range of 80 to 150 million dollars.
 
-![](RackMultipart20220518-1-29277n_html_889c0f9726ddff39.png)
+![](img/Picture31.png)
 
 Are exemptions fair? No, under 50 million dollars land assessment exemption values spike sharply and erratically. Then climbs to 100 million dollars at a much greater rate than land value.
 
-![](RackMultipart20220518-1-29277n_html_3229890122686dc.png)
+![](img/Picture32.png)
 
-![](RackMultipart20220518-1-29277n_html_2a25311922164d3.png)
+![](img/Picture33.png)
 
 After removing the zeroes, I removed three extreme values that were skewing the data
 
-![](RackMultipart20220518-1-29277n_html_7e1b40b1de8ad5d.png)
+![](img/Picture34.png)
 
 This reduced my R-Squared value to 0.64 which was unexpected. It gave me a more spread-out distribution and I was interested in what ways the results would change.
 
-![](RackMultipart20220518-1-29277n_html_417846d0503cdb74.png)
+![](img/Picture35.png)
 
-![](RackMultipart20220518-1-29277n_html_a4e7533c09f4b8a.png)
+![](img/Picture36.png)
 
 The linear model plot shows that the points are more diverse and less fitted.
 
 The gain curve also lost cohesion at higher values which corroborates the linear regression.
 
-![](RackMultipart20220518-1-29277n_html_50a8987369f25422.png)
+![](img/Picture37.png)
 
 As suggested by the gain plot and squared error our prediction is a little less precise but at this level it appears that area does not dictate price. This can be seeing more easily here than before removing the outliers.
 
-![](RackMultipart20220518-1-29277n_html_f9bf5058426a964a.png)
+![](img/Picture38.png)
 
 It confirms one of my beliefs that the more money you have the more you save conversely the less money you have the more you pay. The sharp change in exemptions shows that New York is the city of the rich.
 
-![](RackMultipart20220518-1-29277n_html_e3ae32175354dd65.png)
+![](img/Picture38.png)
 
 ### Conclusion
 
